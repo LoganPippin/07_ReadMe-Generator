@@ -27,14 +27,23 @@ inquirer
       name: "usage",
     },
     {
-      type: "input",
+      type: "list",
       message: "What license is you application under",
       name: "license",
+      choices: [
+        "MIT",
+        "GNU--AGPLv3",
+        "GNU--GPLv3",
+        "GNU--LGPLv3",
+        "MPL--2.0",
+        "Apache--2.0",
+        "BSL--1.0",
+      ],
     },
     {
       type: "input",
-      message: "List all contributing parties.",
-      name: "credit",
+      message: "List all contributing details",
+      name: "contribute",
     },
     {
       type: "input",
@@ -53,38 +62,42 @@ inquirer
     },
   ])
   .then((res) => {
-    fs.writeFile(
-      "README.md",
-      `
-    #${res.title}
+    const file = `
+  # ${res.title}
 
-    ## Table of Contents
+  ## Table of Contents
     
-    - [Description](#Description)
-    - [Installation](#Installation)
-    - [Usage](#Usage)
-    - [License](#License)
-    - [Credits](#Credits)
-    - [Tests](#Tests)
-    - [Questions](#Questions)
+  - [Description](#Description)
+  - [Installation](#Installation)
+  - [Usage](#Usage)
+  - [License](#License)
+  - [Contribution](#Contribution)
+  - [Tests](#Tests)
+  - [Questions](#Questions)
     
-    ## Description
-    ${res.description}
+  ## Description
+  ${res.description}
     
-    ## Installation
-    ${res.install}
-    ## Usage
-    ${res.usage}
-    ## License
-    ${res.license}
-    ## Credits
-    ${res.credits}
-    ## Tests
-    ${res.test}
-    ## Questions
-    * GitHub Username: ${res.username}
-    * Email: ${res.email}
-    `,
-      (err) => (err ? console.log(err) : console.log("Succes!"))
+  ## Installation
+  ${res.install}
+
+  ## Usage
+  ${res.usage}
+
+  ## License
+  ![${res.license}](https://img.shields.io/badge/license-${res.license}-brightgreen)
+
+  ## Contributing
+  ${res.contribute}
+
+  ## Tests
+  ${res.test}
+  
+  ## Questions
+  * GitHub Username: [${res.username}](github.com/${res.username})
+  * Email: ${res.email}`;
+
+    fs.writeFile("README.md", file, (err) =>
+      err ? console.log(err) : console.log("Succes!")
     );
   });
